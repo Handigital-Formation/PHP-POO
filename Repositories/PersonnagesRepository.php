@@ -1,4 +1,15 @@
 <?php
+
+//  //SQL Table code
+// CREATE TABLE `personnages` (
+//     `id` INT NOT NULL AUTO_INCREMENT ,
+//     `nom` VARCHAR(32) NOT NULL ,
+//     `forcePerso` INT NULL ,
+//     `degats` INT NULL ,
+//     `niveau` INT NULL ,
+//     `experience` INT NULL ,
+// PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
 class PersonnagesRepository
 {
     private $_db; // Instance de PDO
@@ -7,15 +18,6 @@ class PersonnagesRepository
     {
         $this->_db = $db;
     }
-    //  //SQL Table code
-    // CREATE TABLE `personnages` (
-    //     `id` INT NOT NULL AUTO_INCREMENT ,
-    //     `nom` VARCHAR(32) NOT NULL ,
-    //     `forcePerso` INT NULL ,
-    //     `degats` INT NULL ,
-    //     `niveau` INT NULL ,
-    //     `experience` INT NULL ,
-    // PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
     public function __construct($db)
     {
@@ -33,7 +35,16 @@ class PersonnagesRepository
         $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
         $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
 
-        return $q->execute();
+        $result = $q->execute();
+        
+        if(!$result) {
+          echo "<br>PDOStatement::errorInfo() dans la fonction add(Personnage) :<br><pre>";
+          $arr = $q->errorInfo();
+          print_r($arr);
+          echo "</pre>";
+        }
+
+        return $result;
     }
 
     //READs
@@ -71,7 +82,16 @@ class PersonnagesRepository
         $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
         $q->bindValue(':id', $perso->id(), PDO::PARAM_INT);
 
-        $q->execute();
+        $result = $q->execute();
+
+        if(!$result) {
+          echo "<br>PDOStatement::errorInfo() dans la fonction update(Personnage) :<br><pre>";
+          $arr = $q->errorInfo();
+          print_r($arr);
+          echo "</pre>";
+        }
+
+        return $result;
     }
 
     //DELETE
